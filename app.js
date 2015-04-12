@@ -1,70 +1,90 @@
 // Alias some shiz.
 var e = React.createElement;
-// The markdown converter.
-var converter = new Showdown.converter();
-
-var exampleNotes = [
-    {
-        title: 'Example note',
-        content: 'This is *markdown*'
-    }
-];
-
-var Editor = React.createClass({
-    render: function() {
-        return (
-            e('div', {className: 'note-editor'},
-                e('textarea', {className: 'editor-textarea', value: this.props.note.content, onChange: this.props.onChange})
-            )
-        );
-    },
-    handleChange: function() {
-        this.setState({value: React.findDOMNode(this.refs.textarea).value});
-    },
-});
-
-var Preview = React.createClass({
-    render: function() {
-        return e('div', {
-            className: 'note-preview',
-            dangerouslySetInnerHTML: {
-                __html: converter.makeHtml(this.props.content)
-            }
-        })
-    }
-});
 
 /**
  * Application Component.
  */
 var App = React.createClass({
     getInitialState: function() {
+        if (!localStorage.hasOwnProperty('notes')) {
+            localStorage.setItem('notes', JSON.stringify([]));
+        }
+        var notes = JSON.parse(localStorage.getItem('notes'));
+
         return {
-            notes: exampleNotes,
-            currentNote: 0
+            notes: notes,
+            currentNote: 0,
+            editorIsOpen: false
         };
     },
     render: function () {
-        var sidebarProps = {
-            notes: this.state.notes
-        };
-
         var note = this.state.notes[this.state.currentNote];
+        return e('div', {
 
-        return e('div', {style: {height: '100%'}}, 
-            e('div', {className: 'navbar'}, e('span', {className: 'navbar-logo'}, 'Notes')),
-            e('div', {className: 'content'},
-                e(Editor, {note: note, onChange: this.handleChange}),
-                e(Preview, {content: note.content})
-            )
+            // App attributes
+        },
+
+            // App children
+            e(Navbar, {
+                notes: this.state.notes,
+                currentNote: this.state.currentNote,
+                editorIsOpen: this.state.editorIsOpen,
+                toggleEditor: this.toggleEditor,
+                handleChange: this.handleNoteChange,
+                createNote: this.createNewNote,
+                deleteNote: this.deleteNote
+            }),
+            (this.state.editorIsOpen ? e(Editor, {note: note, onChange: this.handleChange}) : null ),
+            e(Preview, {content: (note ? note.content : '#You have no notes')})
         );
     },
     handleChange: function(event) {
-
         this.state.notes[this.state.currentNote].content = event.target.value;
+        this.setState({
+            notes: this.state.notes
+        });
+    },
+    toggleEditor: function() {
+
+        if (this.state.editorIsOpen) {
+            this.saveNotes(this.state.notes);
+        }
+
+        this.setState({
+            editorIsOpen: !this.state.editorIsOpen
+        });
+    },
+    createNewNote: function() {
+        var notes = this.state.notes;
+
+        var title = prompt('Note title');
+
+        if (title === null) return;
+
+        var count = notes.push({title: title, content: ''});
+
+        this.saveNotes(notes);
+
+        this.setState({
+            currentNote: count - 1,
+            editorIsOpen: true
+        });
+    },
+    deleteNote: function() {
+        this.state.notes.splice(this.state.currentNote, 1);
 
         this.setState({
             notes: this.state.notes
+        });
+
+        this.saveNotes();
+    },
+    saveNotes: function(notes) {
+        localStorage.setItem('notes', JSON.stringify(notes));
+    },
+    handleNoteChange: function(value) {    
+        this.setState({
+            currentNote: parseInt(value, 10)
         });
     }
 });
