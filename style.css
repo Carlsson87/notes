@@ -1,50 +1,24 @@
 html, body {
     margin: 0;
     font-family: Verdana;
-    height: 100%;
-}
-
-* {
-    box-sizing: border-box;
-}
-
-#app {
-    height: 100%;
 }
 
 #navbar {
     background-color: #ddd;
     line-height: 50px;
-    width: 100%;
-    display: inline-block;
-    border-bottom: 1px solid #c6c6c6;
-}
-
-.navbar-note-title {
-    margin-left: 20px;
+    display: block;
+    padding-left: 10px;
 }
 
 .navbar-controls {
     position: absolute;
-    right: 0;
+    right: 10px;
     top: 0;
 }
 
-.note-list {
-    margin: 0;
-    padding: 0;
-}
-
-.note-list-item {
-    padding: 10px;
-    border-bottom: 1px solid #c6c6c6;
-}
-
 #editor {
-    height: 200px;
-    width: 100%;
-    border-bottom: 1px solid #c6c6c6;
     background-color: #eee;
+    height: 200px;
 }
 
 #preview {

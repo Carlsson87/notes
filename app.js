@@ -13,7 +13,7 @@ var App = React.createClass({
 
         return {
             notes: notes,
-            currentNote: null,
+            currentNote: notes.length ? notes.length-1 : null,
             editorIsOpen: false
         };
     },
