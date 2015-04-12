@@ -13,7 +13,7 @@ var App = React.createClass({
 
         return {
             notes: notes,
-            currentNote: 0,
+            currentNote: null,
             editorIsOpen: false
         };
     },
@@ -72,12 +72,13 @@ var App = React.createClass({
     },
     deleteNote: function() {
         this.state.notes.splice(this.state.currentNote, 1);
+        this.saveNotes(this.state.notes);
 
         this.setState({
-            notes: this.state.notes
+            notes: this.state.notes,
+            editorIsOpen: false
         });
 
-        this.saveNotes();
     },
     saveNotes: function(notes) {
         localStorage.setItem('notes', JSON.stringify(notes));

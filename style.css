@@ -13,6 +13,7 @@ html, body {
 }
 
 #navbar {
+    background-color: #ddd;
     line-height: 50px;
     width: 100%;
     display: inline-block;
