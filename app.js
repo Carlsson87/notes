@@ -73,10 +73,11 @@ var App = React.createClass({
     deleteNote: function() {
         this.state.notes.splice(this.state.currentNote, 1);
         this.saveNotes(this.state.notes);
-
+        var count = this.state.notes.length;
         this.setState({
             notes: this.state.notes,
-            editorIsOpen: false
+            editorIsOpen: false,
+            currentNote: count ? count -1 : null
         });
 
     },
