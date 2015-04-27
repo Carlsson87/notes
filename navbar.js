@@ -5,18 +5,24 @@ var Navbar = React.createClass({
 		});
 
 		var note = this.props.notes[this.props.currentNote];
+
 		return e('div', {
 
 			// Navbar attributes
 			id: 'navbar'
 		},
 			// Navbar children
-			e('span', {className: 'navbar-note-title'}, (note ? note.title : 'Click "New" to create a note -->')),
+			e('h3', {className: 'navbar-note-title', style: {display: 'inline'}}, (note ? note.title : 'Click "New" to create a note -->')),
 			e('div', {className: 'navbar-controls'},
-				e('select', {onChange: this.handleSelectChange, style: {marginRight: 20, display: (this.props.notes.length ? 'inline-block' : 'none')}}, options),
-				e('button', {onClick: this.props.createNote}, 'New'),
-				e('button', {onClick: this.props.toggleEditor, disabled: !this.props.notes.length}, (this.props.editorIsOpen ? 'Save' : 'Edit')),
-				e('button', {onClick: this.props.deleteNote, disabled: !this.props.notes.length}, 'Delete')
+				e('select', {
+					onChange: this.handleSelectChange,
+					style: {marginRight: 20, display: (this.props.notes.length ? 'inline-block' : 'none')},
+					value: this.props.currentNote
+				}, options),
+				e('div', {className: 'btn-group'},
+					e('button', {className:'btn btn-primary', onClick: this.props.createNote}, 'New note'),
+					e('button', {className:'btn btn-danger', onClick: this.props.deleteNote, disabled: !this.props.notes.length}, 'Delete')
+				)
 			)
 		);
 	},

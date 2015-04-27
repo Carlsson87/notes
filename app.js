@@ -13,8 +13,7 @@ var App = React.createClass({
 
         return {
             notes: notes,
-            currentNote: notes.length ? notes.length-1 : null,
-            editorIsOpen: false
+            currentNote: notes.length ? notes.length-1 : null
         };
     },
     render: function () {
@@ -28,13 +27,12 @@ var App = React.createClass({
             e(Navbar, {
                 notes: this.state.notes,
                 currentNote: this.state.currentNote,
-                editorIsOpen: this.state.editorIsOpen,
                 toggleEditor: this.toggleEditor,
                 handleChange: this.handleNoteChange,
                 createNote: this.createNewNote,
                 deleteNote: this.deleteNote
             }),
-            (this.state.editorIsOpen ? e(Editor, {note: note, onChange: this.handleChange}) : null ),
+            e(Editor, {note: note, onChange: this.handleChange}),
             e(Preview, {content: (note ? note.content : '#You have no notes')})
         );
     },
@@ -43,16 +41,7 @@ var App = React.createClass({
         this.setState({
             notes: this.state.notes
         });
-    },
-    toggleEditor: function() {
-
-        if (this.state.editorIsOpen) {
-            this.saveNotes(this.state.notes);
-        }
-
-        this.setState({
-            editorIsOpen: !this.state.editorIsOpen
-        });
+        this.saveNotes(this.state.notes);
     },
     createNewNote: function() {
         var notes = this.state.notes;
@@ -66,8 +55,7 @@ var App = React.createClass({
         this.saveNotes(notes);
 
         this.setState({
-            currentNote: count - 1,
-            editorIsOpen: true
+            currentNote: count - 1
         });
     },
     deleteNote: function() {
@@ -76,7 +64,6 @@ var App = React.createClass({
         var count = this.state.notes.length;
         this.setState({
             notes: this.state.notes,
-            editorIsOpen: false,
             currentNote: count ? count -1 : null
         });
 
